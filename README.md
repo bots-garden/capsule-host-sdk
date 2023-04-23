@@ -1,4 +1,6 @@
-# capsule-host-sdk
+# Capsule Host SDK
+
+🚧 this is a work in progress
 
 This SDK allows to create and manage a WebAssembly host application using [WASI Capsule plugins](https://github.com/bots-garden/capsule-module-sdk).
 
