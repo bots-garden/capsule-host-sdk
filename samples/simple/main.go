@@ -55,6 +55,8 @@ func main() {
 	if err != nil {
 		log.Panicln(err)
 	}
+
+	// TODO: ReadStringFromMemory, ReadBytesFromMemory...
 	
 	res, err := capsule.Result(bRes)
 	if err != nil {

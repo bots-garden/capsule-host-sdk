@@ -1,3 +1,6 @@
 go 1.20
 
-use ./samples/simple
+use (
+    ./samples/simple
+    ./samples/simple.log
+)

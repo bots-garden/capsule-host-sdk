@@ -7,6 +7,17 @@ import (
 	"github.com/tetratelabs/wazero/imports/wasi_snapshot_preview1"
 )
 
+// GetBuilder returns the builder
+func GetBuilder(runtime wazero.Runtime) wazero.HostModuleBuilder {
+	builder := runtime.NewHostModuleBuilder("env")
+
+	// Define default host functions
+	DefineHostFuncLog(builder)
+	DefineHostFuncPrint(builder)
+
+	return builder
+}
+
 // GetRuntime returns the runtime
 func GetRuntime(ctx context.Context) wazero.Runtime {
 	// Create a new WebAssembly Runtime.

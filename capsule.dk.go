@@ -1,7 +1,11 @@
 // Package capsule SDK for host applications
 package capsule
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/tetratelabs/wazero/api"
+)
 
 const isFailure = rune('F')
 const isSuccess = rune('S')
@@ -20,6 +24,8 @@ func failure(buffer []byte) uint64 {
 }
 */
 
+
+
 // Result function
 func Result(data []byte,) ([]byte, error) {
 	if data[0] == byte(isSuccess) {
@@ -27,3 +33,14 @@ func Result(data []byte,) ([]byte, error) {
 	}
 	return nil, errors.New(string(data[1:]))
 }
+
+// GetHandle returns the handle function
+func GetHandle(mod api.Module) api.Function {
+	return mod.ExportedFunction("callHandle")
+}
+
+// GetHandleJSON returns the handle function
+func GetHandleJSON(mod api.Module) api.Function {
+	return mod.ExportedFunction("callHandleJSON")
+}
+// TODO: handle the other handles

@@ -52,6 +52,13 @@ func ReadDataFromMemory(mod api.Module, pos uint32, size uint32) ([]byte, error)
 	return bytes, nil
 }
 
-
-
-// Success Failure
+// ReadBytesFromMemory returns the data in memory
+func ReadBytesFromMemory(mod api.Module, pos uint32, size uint32) ([]byte, error) {
+	data, err := ReadDataFromMemory(mod, pos, size)
+	if err != nil {
+		return nil, err
+	}
+	result, err := Result(data)
+	return result, err
+}
+//TODO: helpers to cast to JSON, etc...
