@@ -43,4 +43,10 @@ func GetHandle(mod api.Module) api.Function {
 func GetHandleJSON(mod api.Module) api.Function {
 	return mod.ExportedFunction("callHandleJSON")
 }
+
+// GetHandleHTTP returns the handle function
+func GetHandleHTTP(mod api.Module) api.Function {
+	return mod.ExportedFunction("callHandleHTTP")
+}
+
 // TODO: handle the other handles

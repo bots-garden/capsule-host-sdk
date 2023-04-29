@@ -10,10 +10,13 @@ import (
 )
 
 // printString : print a string to the console
-var printString = api.GoModuleFunc(func(ctx context.Context, module api.Module, stack []uint64) {
+var printString = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
 
 	// Extract the position and size of the returned value
-	position, length := UnPackPosSize(stack[0])
+	// position, length := UnPackPosSize(stack[0])
+
+	position := uint32(params[0]) 
+	length := uint32(params[1])
 
 	buffer, ok := module.Memory().Read(position, length)
 	if !ok {
@@ -21,7 +24,7 @@ var printString = api.GoModuleFunc(func(ctx context.Context, module api.Module, 
 	}
 	fmt.Println(string(buffer))
 
-	stack[0] = 0 // return 0
+	params[0] = 0 // return 0
 })
 
 
@@ -31,7 +34,8 @@ func DefineHostFuncPrint(builder wazero.HostModuleBuilder) {
 		builder.NewFunctionBuilder().
 		WithGoModuleFunction(printString, 
 			[]api.ValueType{
-				api.ValueTypeI64, // string position + length
+				api.ValueTypeI32, // string position
+				api.ValueTypeI32, // string length
 			}, 
 			[]api.ValueType{api.ValueTypeI32}).
 		Export("hostPrintString")

@@ -3,4 +3,5 @@ go 1.20
 use (
     ./samples/simple
     ./samples/simple.log
+    ./samples/simple.talk
 )
