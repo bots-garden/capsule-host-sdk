@@ -24,6 +24,15 @@ func failure(buffer []byte) uint64 {
 }
 */
 
+func success(buffer []byte) []byte {
+	return append([]byte(string(isSuccess)), buffer...)
+}
+
+func failure(buffer []byte) []byte {
+	return append([]byte(string(isFailure)), buffer...)
+}
+
+
 
 
 // Result function

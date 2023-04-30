@@ -1,18 +1,19 @@
 package capsule
+
 // this hostfunction is a template for the other host functions
 import (
 	"context"
-	"fmt"
 	"log"
+	"os"
 
 	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/api"
 )
 
-// DefineHostFuncTalk defines a host function
-func DefineHostFuncTalk(builder wazero.HostModuleBuilder) {
+// DefineHostFuncGetEnv defines a host function allowing the wasm guest to get an environment variable by name
+func DefineHostFuncGetEnv(builder wazero.HostModuleBuilder) {
 		builder.NewFunctionBuilder().
-		WithGoModuleFunction(talk, 
+		WithGoModuleFunction(getEnv, 
 			[]api.ValueType{
 				api.ValueTypeI32, // string position
 				api.ValueTypeI32, // string length
@@ -20,12 +21,12 @@ func DefineHostFuncTalk(builder wazero.HostModuleBuilder) {
 				api.ValueTypeI32, // returned string length
 			}, 
 			[]api.ValueType{api.ValueTypeI32}).
-		Export("hostTalk")
+		Export("hostGetEnv")
 }
 
 // talk : host function called by the wasm function
 // and then returning data to the wasm module
-var talk = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
+var getEnv = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
 
 	// Position and size of the message coming from the WASM module
 	position := uint32(params[0]) 
@@ -35,17 +36,13 @@ var talk = api.GoModuleFunc(func(ctx context.Context, module api.Module, params 
 	if !ok {
 		log.Panicf("Memory.Read(%d, %d) out of range", position, length)
 	}
+	variableName := string(buffer)
+	variableValue := os.Getenv(variableName)
 
-	messageFromModule := string(buffer)
-	fmt.Println("🟣 message from the WASM module:", messageFromModule)
-
-	// Create a message from the host to reply the guest WASM module
-	messageFromHost := "Hello 😀 I'm the host" 
-
-	messageFromHostLength := len(messageFromHost)
+	variableValueLength := len(variableValue)
 
 	// This is a wasm function defined in the capsule-module-sdk
-	results, err := module.ExportedFunction("allocateBuffer").Call(ctx, uint64(messageFromHostLength))
+	results, err := module.ExportedFunction("allocateBuffer").Call(ctx, uint64(variableValueLength))
 	if err != nil {
 		log.Panicln("Problem when calling allocateBuffer", err)
 	}
@@ -55,10 +52,10 @@ var talk = api.GoModuleFunc(func(ctx context.Context, module api.Module, params 
 
 	allocatedPosition := uint32(results[0])
 	module.Memory().WriteUint32Le(positionReturnBuffer, allocatedPosition)
-	module.Memory().WriteUint32Le(lengthReturnBuffer, uint32(messageFromHostLength))
+	module.Memory().WriteUint32Le(lengthReturnBuffer, uint32(variableValueLength))
 
 	// add the message to the memory of the module
-	module.Memory().Write(allocatedPosition, []byte(messageFromHost))
+	module.Memory().Write(allocatedPosition, []byte(variableValue))
 
 	params[0] = 0
 

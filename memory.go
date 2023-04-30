@@ -3,6 +3,7 @@ package capsule
 import (
 	"context"
 	"errors"
+
 	"github.com/tetratelabs/wazero/api"
 )
 
@@ -42,6 +43,7 @@ func UnPackPosSize(pair uint64) (uint32, uint32) {
 	return pos, size
 }
 
+
 // ReadDataFromMemory returns the data in memory
 func ReadDataFromMemory(mod api.Module, pos uint32, size uint32) ([]byte, error) {
 	// Read the value from the memory
@@ -61,4 +63,36 @@ func ReadBytesFromMemory(mod api.Module, pos uint32, size uint32) ([]byte, error
 	result, err := Result(data)
 	return result, err
 }
-//TODO: helpers to cast to JSON, etc...
+
+//! When using host function
+
+// ReadBytesParameterFromMemory → read the parameter(s) sent by the WASM guest
+func ReadBytesParameterFromMemory(mod api.Module, pos uint32, size uint32) ([]byte, error) {
+	buff, ok := mod.Memory().Read(pos, size)
+	if !ok {
+		return nil, errors.New("out of range of memory size")
+	}
+	return buff, nil
+}
+
+// ReturnBytesToMemory → return data to the WASM guest
+func ReturnBytesToMemory(ctx context.Context, mod api.Module, positionReturnBuffer uint32, lengthReturnBuffer uint32, dataFromHost []byte) (bool, error) {
+	dataFromHostLength := len(dataFromHost)
+	// This is a wasm function defined in the capsule-module-sdk
+	results, err := mod.ExportedFunction("allocateBuffer").Call(ctx, uint64(dataFromHostLength))
+	if err != nil {
+		return false, err
+	}
+	allocatedPosition := uint32(results[0])
+	mod.Memory().WriteUint32Le(positionReturnBuffer, allocatedPosition)
+	mod.Memory().WriteUint32Le(lengthReturnBuffer, uint32(dataFromHostLength))
+
+	// add the message to the memory of the module
+	return mod.Memory().Write(allocatedPosition, dataFromHost), nil
+
+}
+
+/* Documentation:
+
+*/
+

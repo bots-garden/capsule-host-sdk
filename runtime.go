@@ -15,6 +15,9 @@ func GetBuilder(runtime wazero.Runtime) wazero.HostModuleBuilder {
 	DefineHostFuncLog(builder)
 	DefineHostFuncPrint(builder)
 	DefineHostFuncTalk(builder)
+	DefineHostFuncGetEnv(builder)
+	DefineHostFuncWriteFile(builder)
+	DefineHostFuncReadFile(builder)
 
 	return builder
 }
