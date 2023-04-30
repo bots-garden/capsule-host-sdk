@@ -11,8 +11,10 @@ type Request struct {
 
 // Response embeds the data of the http response
 type Response struct {
-	Body    string `json:"Body"`
-	Headers map[string]string `json:"Headers"`
-	StatusCode int `json:"StatusCode"`
+	JSONBody   map[string]interface{} `json:"JSONBody"`
+	TextBody   string                 `json:"TextBody"`
+	Headers    map[string]string      `json:"Headers"`
+	StatusCode int                    `json:"StatusCode"`
 }
 
+// 	Body    map[string]interface{} `json:"Body"`
