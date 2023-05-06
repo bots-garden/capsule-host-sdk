@@ -21,7 +21,7 @@ func main() {
 	defer runtime.Close(ctx)
 
 	// Load the WebAssembly module
-	wasmPath := "../../../capsule-module-sdk/samples/simple/main.wasm"
+	wasmPath := "../../../capsule-module-sdk/samples/simple/simple.wasm"
 	helloWasm, err := os.ReadFile(wasmPath)
 	if err != nil {
 		log.Panicln("📝", err)

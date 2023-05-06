@@ -1,0 +1,106 @@
+version: '3'
+# task build-simple-host build-simple-module test-simple-host
+# task build-simple-hello-host build-simple-hello-module test-simple-hello-host
+# task build-simple-talk-host build-simple-talk-module test-simple-talk-host
+
+tasks:
+  # Build the host
+  build-simple-host:
+    cmds:
+      - |
+        echo "📦 Building simple host..."
+        cd simple
+        go build -o simple-host
+        ls -lh simple-host
+
+  # Build the module
+  build-simple-module:
+    cmds:
+      - |
+        echo "📦 Building simple.wasm module..."
+        cd ../../capsule-module-sdk/samples/simple
+        tinygo build -o simple.wasm \
+          -scheduler=none \
+          --no-debug \
+          -target wasi ./main.go 
+        ls -lh *.wasm
+
+  # Test the simple host
+  # it should display "Hello Bob Morane"
+  test-simple-host:
+    cmds:
+      - | 
+        echo "🚀 Testing simple-host..."
+        cd simple
+        ./simple-host
+
+
+  # Build the host
+  build-simple-hello-host:
+    cmds:
+      - |
+        echo "📦 Building simple-hello host..."
+        cd simple-hello
+        go build -o simple-hello-host
+        ls -lh simple-hello-host
+
+  # Build the module
+  build-simple-hello-module:
+    cmds:
+      - |
+        echo "📦 Building simple-hello.wasm module..."
+        cd ../../capsule-module-sdk/samples/simple-hello
+        tinygo build -o simple-hello.wasm \
+          -scheduler=none \
+          --no-debug \
+          -target wasi ./main.go 
+        ls -lh *.wasm
+
+  # Test the host
+  # it should display something like this:
+  #   👋 hello Bob Morane
+  #   2023-05-06 17:54:53.09077645 +0200 CEST m=+0.051404095 : 🟣 from the plugin: Bob Morane
+  #   💜 from the plugin: Bob Morane
+  #   Hello Bob Morane
+  test-simple-hello-host:
+    cmds:
+      - | 
+        echo "🚀 Testing simple-hello-host..."
+        cd simple-hello
+        ./simple-hello-host
+
+
+  # Build the host
+  build-simple-talk-host:
+    cmds:
+      - |
+        echo "📦 Building simple-talk host..."
+        cd simple-talk
+        go build -o simple-talk-host
+        ls -lh simple-talk-host
+
+  # Build the module
+  build-simple-talk-module:
+    cmds:
+      - |
+        echo "📦 Building simple-talk.wasm module..."
+        cd ../../capsule-module-sdk/samples/simple-talk
+        tinygo build -o simple-talk.wasm \
+          -scheduler=none \
+          --no-debug \
+          -target wasi ./main.go 
+        ls -lh *.wasm
+
+  # Test the host
+  # it should display something like this:
+  #   2023-05-06 18:02:29.955752145 +0200 CEST m=+0.048184764 : 🟣 from the plugin: Bob Morane
+  #   💜 from the plugin: Bob Morane
+  #   🟣 message from the WASM module: Hello I'm the WASM plugin
+  #   🤖Hello 😀 I'm the host
+  #   Hello Bob Morane
+  test-simple-talk-host:
+    cmds:
+      - | 
+        echo "🚀 Testing simple-talk-host..."
+        cd simple-talk
+        ./simple-talk-host
