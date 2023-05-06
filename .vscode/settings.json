@@ -21,5 +21,6 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
     "keyboard.layout": "com.apple.keylayout.French",
+    "go.lintTool": "revive",
   }
     

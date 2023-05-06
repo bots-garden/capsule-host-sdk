@@ -30,9 +30,9 @@ func CopyDataToMemory(ctx context.Context, mod api.Module, data []byte) (uint64,
 	// Copy data to memory
 	if !mod.Memory().Write(uint32(dataPosition), data) {
 		return 0, 0, errors.New("out of range of memory size")
-	} else {
-		return dataPosition, dataSize, nil
 	}
+	return dataPosition, dataSize, nil
+	
 }
 
 // UnPackPosSize extract the position and size from a unique value

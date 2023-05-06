@@ -12,12 +12,18 @@ func GetBuilder(runtime wazero.Runtime) wazero.HostModuleBuilder {
 	builder := runtime.NewHostModuleBuilder("env")
 
 	// Define default host functions
-	DefineHostFuncLog(builder)
-	DefineHostFuncPrint(builder)
-	DefineHostFuncTalk(builder)
-	DefineHostFuncGetEnv(builder)
-	DefineHostFuncWriteFile(builder)
-	DefineHostFuncReadFile(builder)
+	DefineHostFuncLog(builder) // see hostfunc.log.go
+	DefineHostFuncPrint(builder) // see hostfunc.print.go
+	DefineHostFuncTalk(builder) // see hostfunc.talk.go //! this one is a kind of template
+	DefineHostFuncGetEnv(builder) // see hostfunc.getenv.go
+	DefineHostFuncWriteFile(builder) // see hostfunc.filewrite.go
+	DefineHostFuncReadFile(builder) // see hostfunc.readfile.go
+	DefineHostFuncHTTP(builder) // see hostfunc.http.go
+
+	DefineHostFuncCacheGet(builder) // see hostfunc.memorycache.go
+	DefineHostFuncCacheSet(builder) // see hostfunc.memorycache.go
+	DefineHostFuncCacheDel(builder) // see hostfunc.memorycache.go
+	DefineHostFuncCacheKeys(builder) // see hostfunc.memorycache.go
 
 	return builder
 }

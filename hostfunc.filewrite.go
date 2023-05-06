@@ -68,5 +68,6 @@ var writeFile = api.GoModuleFunc(func(ctx context.Context, module api.Module, pa
 })
 
 /* Documentation:
-
+! concurrent are not managed
+? don't use it with the capsule-http runner
  */

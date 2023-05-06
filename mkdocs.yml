@@ -1,0 +1,50 @@
+site_name: Capsule Host SDK (HDK)
+site_url: https://bots-garden.github.io/capsule-host-sdk/
+site_author: Philippe Charrière (@k33g)
+site_description: >-
+  **Capsule Host SDK (HDK)** is a SDK to build webassembly host applications (like capsule-http).
+# Repository
+repo_name: bots-garden/capsule-host-sdk
+repo_url: https://github.com/bots-garden/capsule-host-sdk
+
+# Copyright
+copyright: Copyright &copy; 2023 - 2024 Philippe Charrière
+
+nav:
+    - 🏠 Home: index.md
+    - 🚀 Getting Started: getting-started.md
+    - 📝 Developer guide:
+      - First Capsule application: first-capsule-app.md
+    - 🛠️ Host functions: host-functions.md
+ 
+theme:
+  name: material
+  palette:
+    primary: purple
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - pymdownx.highlight:
+      use_pygments: true
+      auto_title: false
+      linenums: true
+      anchor_linenums: true
+  - pymdownx.superfences
+
+
+
+
+#theme:
+#    name: readthedocs
+#    highlightjs: true
+#    hljs_languages:
+#        - yaml
+#        - rust
+#        - golang
+#        - bash
+#        - javascript

@@ -3,10 +3,12 @@ package models
 
 // Request embeds the data of the http request
 type Request struct {
-	Body    string
-	URI     string
-	Method  string
-	Headers string
+	Body     string
+	JSONBody string //! to use in the future
+	TextBody string //! to use in the future
+	URI      string
+	Method   string
+	Headers  string
 }
 
 // Response embeds the data of the http response
