@@ -1,6 +1,5 @@
 package capsule
 
-// this hostfunction is a template for the other host functions
 import (
 	"context"
 	"log"
@@ -10,7 +9,14 @@ import (
 	"github.com/tetratelabs/wazero/api"
 )
 
-// DefineHostFuncReadFile defines a host function
+// DefineHostFuncReadFile defines a function that reads a file from the host file system
+// and returns its content as a string. The function takes in four parameters:
+// - filePath: the pointer to the string representing the file path
+// - filePathLen: the length of the file path string
+// - returned: a pointer to the string where the file content will be stored
+// - returnedLen: the length of the returned string
+//
+// The function returns an integer representing whether the operation was successful.
 func DefineHostFuncReadFile(builder wazero.HostModuleBuilder) {
 	builder.NewFunctionBuilder().
 		WithGoModuleFunction(readFile,
@@ -57,7 +63,3 @@ var readFile = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	params[0] = 0
 
 })
-
-/* Documentation:
-
-*/

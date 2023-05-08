@@ -1,6 +1,5 @@
 package capsule
 
-// this hostfunction is a template for the other host functions
 import (
 	"context"
 	"log"
@@ -10,7 +9,12 @@ import (
 	"github.com/tetratelabs/wazero/api"
 )
 
-// DefineHostFuncGetEnv defines a host function allowing the wasm guest to get an environment variable by name
+// DefineHostFuncGetEnv defines a new host function to get the environment variable value.
+//
+// Parameters:
+// - builder: the HostModuleBuilder to add the function to.
+//
+// Returns: nothing.
 func DefineHostFuncGetEnv(builder wazero.HostModuleBuilder) {
 		builder.NewFunctionBuilder().
 		WithGoModuleFunction(getEnv, 

@@ -1,6 +1,7 @@
 # Capsule Host SDK
 
 !!! info "What's new?"
+    - `v0.0.2`: ✨ Redis support
     - `v0.0.1`: 🎉 first release
 
 ## What is the Capsule Host SDK alias **Capsule HDK**?

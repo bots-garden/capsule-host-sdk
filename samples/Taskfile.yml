@@ -104,3 +104,26 @@ tasks:
         echo "🚀 Testing simple-talk-host..."
         cd simple-talk
         ./simple-talk-host
+
+  # Build the cracker host
+  # It's a simple http server
+  build-cracker-host:
+    cmds:
+      - |
+        echo "📦 Building cracker host..."
+        cd cracker
+        go build -o cracker
+        ls -lh cracker
+
+  test-cracker-host:
+    cmds:
+      - | 
+        echo "🚀 Testing cracker host..."
+        cd cracker
+        ./cracker ../../../capsule-module-sdk/samples/say-hello/say-hello.wasm 8080 &
+        sleep 1
+      - |
+        curl -X POST http://localhost:8080 \
+        -H 'Content-Type: text/plain; charset=utf-8' \
+        -d "Bob Morane 🥰"
+      - killport 8080

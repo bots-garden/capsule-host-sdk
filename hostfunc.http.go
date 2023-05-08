@@ -25,7 +25,13 @@ type request struct {
 	Headers  map[string]string      `json:"Headers"`
 }
 
-// DefineHostFuncHTTP defines a host function
+// DefineHostFuncHTTP defines the host module function for handling HTTP requests.
+//
+// Parameter(s):
+// builder: the wazero.HostModuleBuilder used to define the function.
+//
+// Return(s):
+// None.
 func DefineHostFuncHTTP(builder wazero.HostModuleBuilder) {
 	builder.NewFunctionBuilder().
 		WithGoModuleFunction(http,
@@ -170,6 +176,10 @@ var http = api.GoModuleFunc(func(ctx context.Context, module api.Module, params 
 
 })
 
+// buildResponseJSONString takes a resty.Response pointer as input and returns a JSON string and an error.
+// The function builds a JSON string of the response headers and response body. If the response is in JSON format,
+// the function includes the JSON body in the JSON string; otherwise, the function includes the text body in the JSON
+// string with double quotes. The function also includes the status code in the JSON string.
 func buildResponseJSONString(resp *resty.Response) (string, error) {
 	// build headers JSON string
 	// ! ATTENTION resp.Header() return a map[string]string[] (instead of map[string]string)
@@ -205,7 +215,3 @@ func buildResponseJSONString(resp *resty.Response) (string, error) {
 
 	return jsonHTTPResponse, err
 }
-
-/* Documentation:
-
- */

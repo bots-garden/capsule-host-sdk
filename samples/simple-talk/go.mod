@@ -8,6 +8,6 @@ require (
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 )
 
-require github.com/bots-garden/capsule-host-sdk v0.0.0
+require github.com/bots-garden/capsule-host-sdk v0.0.2
 
 replace github.com/bots-garden/capsule-host-sdk => ../..

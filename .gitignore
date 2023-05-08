@@ -3,5 +3,6 @@ host
 simple-host
 simple-hello-host
 simple-talk-host
+cracke/cracker
 *.wasm
 site

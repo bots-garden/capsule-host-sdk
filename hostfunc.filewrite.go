@@ -1,6 +1,5 @@
 package capsule
 
-// this hostfunction is a template for the other host functions
 import (
 	"context"
 	"log"
@@ -10,7 +9,15 @@ import (
 	"github.com/tetratelabs/wazero/api"
 )
 
-// DefineHostFuncWriteFile defines a host function
+// DefineHostFuncWriteFile creates a new function called hostWriteFile in the
+// HostModuleBuilder. It accepts the following parameters:
+// - filePath (int32): position
+// - filePath (int32): length
+// - content (int32): position
+// - content (int32): length
+// - returned (int32): position
+// - returned (int32): length
+// The function returns an int32.
 func DefineHostFuncWriteFile(builder wazero.HostModuleBuilder) {
 	builder.NewFunctionBuilder().
 		WithGoModuleFunction(writeFile,
@@ -66,8 +73,3 @@ var writeFile = api.GoModuleFunc(func(ctx context.Context, module api.Module, pa
 	params[0] = 0
 
 })
-
-/* Documentation:
-! concurrent are not managed
-? don't use it with the capsule-http runner
- */

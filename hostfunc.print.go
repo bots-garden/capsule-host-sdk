@@ -28,7 +28,12 @@ var printString = api.GoModuleFunc(func(ctx context.Context, module api.Module, 
 })
 
 
-// DefineHostFuncPrint defines a host function
+// DefineHostFuncPrint defines the hostPrintString function which takes in a 
+// string position and string length as parameters, and returns an integer. 
+//
+// builder: The HostModuleBuilder object.
+// 
+// Returns: None.
 func DefineHostFuncPrint(builder wazero.HostModuleBuilder) {
 		// hostPrintString
 		builder.NewFunctionBuilder().
@@ -40,3 +45,4 @@ func DefineHostFuncPrint(builder wazero.HostModuleBuilder) {
 			[]api.ValueType{api.ValueTypeI32}).
 		Export("hostPrintString")
 }
+// DefineHostFuncPrint defines a host function

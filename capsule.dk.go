@@ -10,32 +10,28 @@ import (
 const isFailure = rune('F')
 const isSuccess = rune('S')
 
-/*
-func main() {
-	panic("not implemented")
-}
-
-func success(buffer []byte) uint64 {
-	return copyBufferToMemory(append([]byte(string(isSuccess)), buffer...))
-}
-
-func failure(buffer []byte) uint64 {
-	return copyBufferToMemory(append([]byte(string(isFailure)), buffer...))
-}
-*/
-
+// success appends the isSuccess byte to the beginning of the input buffer and returns the result.
+//
+// buffer: byte slice to append isSuccess byte to.
+// []byte: byte slice with the appended isSuccess byte.
 func success(buffer []byte) []byte {
 	return append([]byte(string(isSuccess)), buffer...)
 }
 
+// failure appends a string "isFailure" to the given byte slice buffer and returns the new slice.
+//
+// buffer: the byte slice to which "isFailure" is appended.
+// Returns the new byte slice with the string "isFailure" appended to it.
 func failure(buffer []byte) []byte {
 	return append([]byte(string(isFailure)), buffer...)
 }
 
-
-
-
-// Result function
+// Result returns the data without the first byte if the first byte is isSuccess.
+// Otherwise, it returns nil and an error with the data starting from the second byte.
+//
+// data: A byte slice containing the data to check.
+// []byte: The data without the first byte if the first byte is isSuccess.
+// error: If the first byte is not isSuccess, it returns an error with the data starting from the second byte.
 func Result(data []byte,) ([]byte, error) {
 	if data[0] == byte(isSuccess) {
 		return data[1:], nil
@@ -43,19 +39,30 @@ func Result(data []byte,) ([]byte, error) {
 	return nil, errors.New(string(data[1:]))
 }
 
-// GetHandle returns the handle function
+// GetHandle returns an exported function named "callHandle" from the given module.
+//
+// mod: The module to retrieve the function from.
+//
+// Returns: An exported function with the name "callHandle".
 func GetHandle(mod api.Module) api.Function {
 	return mod.ExportedFunction("callHandle")
 }
 
-// GetHandleJSON returns the handle function
+// GetHandleJSON returns the exported "callHandleJSON" function from the given module.
+//
+// mod: the module to retrieve the function from.
+//
+// returns: the exported "callHandleJSON" function.
 func GetHandleJSON(mod api.Module) api.Function {
 	return mod.ExportedFunction("callHandleJSON")
 }
 
-// GetHandleHTTP returns the handle function
+// GetHandleHTTP returns the exported 'callHandleHTTP' function from a given module.
+//
+// mod: The module containing the exported function.
+//
+// returns:
+//     - api.Function: the exported 'callHandleHTTP' function.
 func GetHandleHTTP(mod api.Module) api.Function {
 	return mod.ExportedFunction("callHandleHTTP")
 }
-
-// TODO: handle the other handles

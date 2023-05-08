@@ -30,8 +30,11 @@ var logString = api.GoModuleFunc(func(ctx context.Context, module api.Module, pa
 	params[0] = 0 // return 0
 })
 
-
-// DefineHostFuncLog defines a host function
+// DefineHostFuncLog defines and exports a host module function called hostLogString.
+// This function takes two parameters:
+//     - string position (i32)
+//     - string length (i32)
+// It returns an i32 value.
 func DefineHostFuncLog(builder wazero.HostModuleBuilder) {
 		// hostLogString
 		builder.NewFunctionBuilder().
