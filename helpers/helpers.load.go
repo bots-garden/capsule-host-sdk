@@ -32,3 +32,10 @@ func DownloadWasmFile(wasmFileURL, wasmFilePath string) ([]byte, error) {
 	return LoadWasmFile(wasmFilePath)
 
 }
+
+// TODO:
+// GitLab registry (with and without token)
+// GitHub registry (with and without token)
+// From S3
+// https://wapm.io/ (if possible)
+// Other OCI registries
