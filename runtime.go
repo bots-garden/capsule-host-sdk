@@ -42,6 +42,7 @@ func GetRuntime(ctx context.Context) wazero.Runtime {
 	return runtime
 }
 
+
 // CallHandleFunction calls the given handleFunction with the argument argFunction
 // and returns the result. The function uses CopyDataToMemory to copy the argument
 // to memory, and UnPackPosSize to unpack the result. Returns a byte slice and an
