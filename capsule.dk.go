@@ -2,8 +2,11 @@
 package capsule
 
 import (
+	"context"
 	"errors"
+	"log"
 
+	"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/api"
 )
 
@@ -66,3 +69,39 @@ func GetHandleJSON(mod api.Module) api.Function {
 func GetHandleHTTP(mod api.Module) api.Function {
 	return mod.ExportedFunction("callHandleHTTP")
 }
+
+// CallOnStart calls the OnStart function (if it exists) from the given module.
+func CallOnStart(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
+
+	mod, err := runtime.Instantiate(ctx, wasmFile)
+	if err != nil {
+		log.Println("❌ [OnStart] Error with the module instance", err)
+	}
+
+	onStart := mod.ExportedFunction("OnStart")
+	if onStart != nil {
+		_, err := onStart.Call(ctx)
+		if err != nil {
+			log.Println("❌ Error calling OnStart", err)
+			panic(err)
+		}
+	}
+}
+
+// CallOnStop calls the OnStop function (if it exists) from the given module.
+func CallOnStop(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
+	mod, err := runtime.Instantiate(ctx, wasmFile)
+	if err != nil {
+		log.Println("❌ [OnStop] Error with the module instance", err)
+	}
+
+	onStop := mod.ExportedFunction("OnStop")
+	if onStop != nil {
+		_, err := onStop.Call(ctx)
+		if err != nil {
+			log.Println("❌ Error calling OnStop", err)
+			panic(err)
+		}
+	}
+}
+
