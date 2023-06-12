@@ -16,6 +16,7 @@ nav:
     - 📝 Developer guide:
       - First Capsule application: first-capsule-app.md
     - 🛠️ Host functions: host-functions.md
+    - 🧰 Helpers: helpers.md
  
 theme:
   name: material

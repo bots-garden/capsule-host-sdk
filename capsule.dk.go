@@ -104,4 +104,3 @@ func CallOnStop(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
 		}
 	}
 }
-

@@ -22,8 +22,9 @@ tasks:
     env:
       #TAG: "v0.0.1"
       #TAG: "v0.0.2" 
-      TAG: "v0.0.3" # current release
-      #TAG: "v0.0.4" # it will be the next release
+      #TAG: "v0.0.3" 
+      TAG: "v0.0.4" # current release
+      #TAG: "v0.0.5" # it will be the next release
     cmds:
       - echo "📦 Generating release..."
       - git add .
