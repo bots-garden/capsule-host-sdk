@@ -23,6 +23,9 @@ import (
 
 var memCache sync.Map
 
+//var memoryCache = make(map[string][]byte)
+//var mutex = &sync.RWMutex{}
+
 // DefineHostFuncCacheSet defines a new Go module function for setting values in
 // the cache. It takes in 6 parameters:
 //   - key position (int32)
@@ -73,6 +76,13 @@ var cacheSet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	
 	// start the host work
 	memCache.Store(string(bufferKey), bufferStringValue)
+
+	/*
+	mutex.Lock()
+	defer mutex.Unlock()
+	memoryCache[string(bufferKey)] = bufferStringValue
+	*/
+	
 	resultFromHost = success(bufferKey)
 	//! we cannot know if there is an error or not
 	// end of the host work
@@ -87,6 +97,7 @@ var cacheSet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	}
 
 	params[0] = 0
+
 
 })
 
@@ -125,7 +136,20 @@ var cacheGet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	// Execute the host function with the arguments and return a value
 	var resultFromHost []byte
 	
+	/*
+	mutex.RLock()
+	defer mutex.RUnlock()
+	result := memoryCache[string(bufferKey)]
+	if result == nil {
+		resultFromHost = failure([]byte("key not found"))
+	} else {
+		resultFromHost = success(result)
+	}
+	*/
+	
+
 	// start the host work
+	
 	result, ok := memCache.Load(string(bufferKey))
 
 	if ok {
@@ -133,6 +157,7 @@ var cacheGet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	} else {
 		resultFromHost = failure([]byte("key not found"))
 	}
+	
 	// end of the host work
 
 	// return the result value (using the return buffer)

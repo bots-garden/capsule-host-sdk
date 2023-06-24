@@ -1,6 +1,7 @@
 # Capsule Host SDK
 
 !!! info "What's new?"
+    - `v0.0.5`: ✨ Helpers updated: `CallOnStart` and `CallOnStop` (they are executed from the same wasm module instance)
     - `v0.0.4`: ✨ Helpers added: `CallOnStart` and `CallOnStop`
     - `v0.0.3`: ✨ Wazero update 1.2.0
     - `v0.0.2`: ✨ Redis support

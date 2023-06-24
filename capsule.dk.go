@@ -6,7 +6,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/tetratelabs/wazero"
+	//"github.com/tetratelabs/wazero"
 	"github.com/tetratelabs/wazero/api"
 )
 
@@ -71,12 +71,7 @@ func GetHandleHTTP(mod api.Module) api.Function {
 }
 
 // CallOnStart calls the OnStart function (if it exists) from the given module.
-func CallOnStart(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
-
-	mod, err := runtime.Instantiate(ctx, wasmFile)
-	if err != nil {
-		log.Println("❌ [OnStart] Error with the module instance", err)
-	}
+func CallOnStart(ctx context.Context, mod api.Module , wasmFile []byte) {
 
 	onStart := mod.ExportedFunction("OnStart")
 	if onStart != nil {
@@ -89,11 +84,7 @@ func CallOnStart(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
 }
 
 // CallOnStop calls the OnStop function (if it exists) from the given module.
-func CallOnStop(ctx context.Context, runtime wazero.Runtime, wasmFile []byte) {
-	mod, err := runtime.Instantiate(ctx, wasmFile)
-	if err != nil {
-		log.Println("❌ [OnStop] Error with the module instance", err)
-	}
+func CallOnStop(ctx context.Context, mod api.Module, wasmFile []byte) {
 
 	onStop := mod.ExportedFunction("OnStop")
 	if onStop != nil {
