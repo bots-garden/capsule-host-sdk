@@ -25,6 +25,7 @@ tasks:
       #TAG: "v0.0.3" 
       #TAG: "v0.0.4"
       #TAG: "v0.0.5"
+      # NEw release of the HDK
       TAG: "v0.0.6"
     cmds:
       - echo "📦 Generating release..."
