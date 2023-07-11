@@ -23,8 +23,9 @@ tasks:
       #TAG: "v0.0.1"
       #TAG: "v0.0.2" 
       #TAG: "v0.0.3" 
-      #TAG: "v0.0.4" # current release
-      TAG: "v0.0.5"
+      #TAG: "v0.0.4"
+      #TAG: "v0.0.5"
+      TAG: "v0.0.6"
     cmds:
       - echo "📦 Generating release..."
       - git add .
