@@ -2,6 +2,7 @@ version: '3'
 # task build-simple-host build-simple-module test-simple-host
 # task build-simple-hello-host build-simple-hello-module test-simple-hello-host
 # task build-simple-talk-host build-simple-talk-module test-simple-talk-host
+# task build-cracker-host test-cracker-host
 
 tasks:
   # Build the host

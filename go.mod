@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/redis/go-redis/v9 v9.0.4
-	github.com/tetratelabs/wazero v1.2.0
+	github.com/tetratelabs/wazero v1.3.0
 )
 
 require (
