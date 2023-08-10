@@ -17,14 +17,33 @@ var redisDb *redis.Client
 
 // InitRedisClient initializes a Redis client instance if it is not already initialized.
 func InitRedisClient() {
-    if redisDb == nil {
-        defaultDb, _ := strconv.Atoi(helpers.GetEnv("REDIS_DEFAULTDB", "0"))
-        redisDb = redis.NewClient(&redis.Options{
-            Addr:     helpers.GetEnv("REDIS_ADDR", "localhost:6379"),
-            Password: helpers.GetEnv("REDIS_PWD", ""), // no password set
-            DB:       defaultDb,                       // use default DB
-        })
-    }
+
+	if redisDb == nil {
+
+		redisURI := helpers.GetEnv("REDIS_URI", "")
+
+		if redisURI == "" {
+			addr := helpers.GetEnv("REDIS_ADDR", "localhost:6379")
+			password := helpers.GetEnv("REDIS_PWD", "") // no password set
+
+			defaultDb, _ := strconv.Atoi(helpers.GetEnv("REDIS_DEFAULTDB", "0"))
+
+			redisDb = redis.NewClient(&redis.Options{
+				Addr:     addr,
+				Password: password,
+				DB:       defaultDb, // use default DB
+			})
+		} else {
+			addr, err := redis.ParseURL(redisURI)
+			if err != nil {
+				// TODO: handle this error
+				panic(err)
+			}
+			//? how to handle the "non connection"?
+			redisDb = redis.NewClient(addr)
+		}
+
+	}
 }
 
 // getRedisClient returns a pointer to a Redis client.
@@ -32,7 +51,7 @@ func InitRedisClient() {
 // This function takes no parameters.
 // It returns a pointer to a Redis client.
 func getRedisClient() *redis.Client {
-    return redisDb
+	return redisDb
 }
 
 // DefineHostFuncRedisSet defines a Go function that sets a value in Redis.
@@ -57,7 +76,7 @@ func DefineHostFuncRedisSet(builder wazero.HostModuleBuilder) {
 // redisSet : host function called by the wasm function
 // and then returning data to the wasm module
 var redisSet = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
-	
+
 	// read the value of the arguments of the function
 	keyPosition := uint32(params[0])
 	keyLength := uint32(params[1])
@@ -77,9 +96,9 @@ var redisSet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 
 	// Execute the host function with the arguments and return a value
 	var resultFromHost []byte
-	
+
 	// start the host work (using Redis client)
-	InitRedisClient() // initialize the redis client only if it does not exist
+	InitRedisClient()                                                                      // initialize the redis client only if it does not exist
 	err = getRedisClient().Set(ctx, string(bufferKey), string(bufferStringValue), 0).Err() // TODO: check if []byte is ok for the value
 	if err != nil {
 		resultFromHost = failure([]byte(err.Error()))
@@ -101,7 +120,6 @@ var redisSet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 
 })
 
-
 // DefineHostFuncRedisGet defines a function that gets a value from Redis cache.
 func DefineHostFuncRedisGet(builder wazero.HostModuleBuilder) {
 	builder.NewFunctionBuilder().
@@ -113,13 +131,13 @@ func DefineHostFuncRedisGet(builder wazero.HostModuleBuilder) {
 				api.ValueTypeI32, // returned length
 			},
 			[]api.ValueType{api.ValueTypeI32}).
-		Export("hostCacheGet")
+		Export("hostRedisGet")
 }
 
 // redisGet : host function called by the wasm function
 // and then returning data to the wasm module
 var redisGet = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
-	
+
 	// read the value of the arguments of the function
 	keyPosition := uint32(params[0])
 	keyLength := uint32(params[1])
@@ -131,7 +149,7 @@ var redisGet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 
 	// Execute the host function with the arguments and return a value
 	var resultFromHost []byte
-	
+
 	// start the host work
 	result, err := getRedisClient().Get(ctx, string(bufferKey)).Result()
 	if err != nil {
@@ -169,13 +187,13 @@ func DefineHostFuncRedisDel(builder wazero.HostModuleBuilder) {
 				api.ValueTypeI32, // returned length
 			},
 			[]api.ValueType{api.ValueTypeI32}).
-		Export("hostCacheDel")
+		Export("hostRedisDel")
 }
 
 // redisDel : host function called by the wasm function
 // and then returning data to the wasm module
 var redisDel = api.GoModuleFunc(func(ctx context.Context, module api.Module, params []uint64) {
-	
+
 	// read the value of the arguments of the function
 	keyPosition := uint32(params[0])
 	keyLength := uint32(params[1])
@@ -187,7 +205,7 @@ var redisDel = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 
 	// Execute the host function with the arguments and return a value
 	var resultFromHost []byte
-	
+
 	// start the host work
 	_, err = getRedisClient().Del(ctx, string(bufferKey)).Result()
 	if err != nil {
@@ -215,7 +233,7 @@ var redisDel = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 // filter length, returned position and returned length. It returns an integer.
 func DefineHostFuncRedisKeys(builder wazero.HostModuleBuilder) {
 	builder.NewFunctionBuilder().
-		WithGoModuleFunction(cacheKeys,
+		WithGoModuleFunction(redisKeys,
 			[]api.ValueType{
 				api.ValueTypeI32, // filter position
 				api.ValueTypeI32, // filter length
@@ -223,7 +241,7 @@ func DefineHostFuncRedisKeys(builder wazero.HostModuleBuilder) {
 				api.ValueTypeI32, // returned length
 			},
 			[]api.ValueType{api.ValueTypeI32}).
-		Export("hostCacheKeys")
+		Export("hostRedisKeys")
 }
 
 // redisKeys : host function called by the wasm function
@@ -241,16 +259,16 @@ var redisKeys = api.GoModuleFunc(func(ctx context.Context, module api.Module, pa
 
 	// Execute the host function with the arguments and return a value
 	var resultFromHost []byte
-	
+
 	// start the host work
 	var keysMap = make(map[string][]string)
 
 	// call the redis KEYS command
-    keys, err := getRedisClient().Keys(ctx, string(bufferFilter)).Result()
+	keys, err := getRedisClient().Keys(ctx, string(bufferFilter)).Result()
 	if err != nil {
 		resultFromHost = failure([]byte(err.Error()))
 	} else {
-		keysMap["keys"] = keys 
+		keysMap["keys"] = keys
 		jsonStr, err := json.Marshal(keysMap)
 		// {"keys":["key1","key2"]}
 		if err != nil {

@@ -8,7 +8,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/redis/go-redis/v9 v9.0.4 // indirect
 	github.com/tetratelabs/wazero v1.3.0 // indirect
-	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
+	golang.org/x/net v0.9.0 // indirect
 )
 
 require github.com/bots-garden/capsule-host-sdk v0.0.6

@@ -9,7 +9,7 @@ tasks:
   # We use [mkdocs](https://www.mkdocs.org/)
   install-mkdocs:
     cmds:
-      - pip install mkdocs-material
+      - pipx install mkdocs-material --include-deps
   serve-mkdocs:
     cmds:
       - mkdocs serve
@@ -25,8 +25,8 @@ tasks:
       #TAG: "v0.0.3" 
       #TAG: "v0.0.4"
       #TAG: "v0.0.5"
-      # NEw release of the HDK
-      TAG: "v0.0.6"
+      #TAG: "v0.0.6"
+      TAG: "v0.0.7"
     cmds:
       - echo "📦 Generating release..."
       - git add .

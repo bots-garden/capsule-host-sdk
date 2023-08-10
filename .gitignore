@@ -1,4 +1,5 @@
 .DS_Store
+._.*
 host
 simple-host
 simple-hello-host

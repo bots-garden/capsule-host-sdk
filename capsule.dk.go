@@ -10,6 +10,10 @@ import (
 	"github.com/tetratelabs/wazero/api"
 )
 
+func TestMe() string {
+	return "🦊"
+}
+
 const isFailure = rune('F')
 const isSuccess = rune('S')
 

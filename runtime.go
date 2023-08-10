@@ -27,6 +27,11 @@ func GetBuilder(runtime wazero.Runtime) wazero.HostModuleBuilder {
 	DefineHostFuncCacheDel(builder) // see hostfunc.memorycache.go
 	DefineHostFuncCacheKeys(builder) // see hostfunc.memorycache.go
 
+	DefineHostFuncRedisDel(builder)
+	DefineHostFuncRedisGet(builder)
+	DefineHostFuncRedisKeys(builder)
+	DefineHostFuncRedisSet(builder)
+
 	return builder
 }
 

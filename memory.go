@@ -129,7 +129,7 @@ func ReturnBytesToMemory(ctx context.Context, mod api.Module, positionReturnBuff
 	allocatedPosition := uint32(results[0])
 	mod.Memory().WriteUint32Le(positionReturnBuffer, allocatedPosition)
 	mod.Memory().WriteUint32Le(lengthReturnBuffer, uint32(dataFromHostLength))
-
+	
 	// add the message to the memory of the module
 	return mod.Memory().Write(allocatedPosition, dataFromHost), nil
 
