@@ -151,6 +151,7 @@ var redisGet = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	var resultFromHost []byte
 
 	// start the host work
+	InitRedisClient()  
 	result, err := getRedisClient().Get(ctx, string(bufferKey)).Result()
 	if err != nil {
 		resultFromHost = failure([]byte(err.Error()))
@@ -207,6 +208,7 @@ var redisDel = api.GoModuleFunc(func(ctx context.Context, module api.Module, par
 	var resultFromHost []byte
 
 	// start the host work
+	InitRedisClient()  
 	_, err = getRedisClient().Del(ctx, string(bufferKey)).Result()
 	if err != nil {
 		resultFromHost = failure([]byte(err.Error()))
@@ -264,6 +266,7 @@ var redisKeys = api.GoModuleFunc(func(ctx context.Context, module api.Module, pa
 	var keysMap = make(map[string][]string)
 
 	// call the redis KEYS command
+	InitRedisClient()  
 	keys, err := getRedisClient().Keys(ctx, string(bufferFilter)).Result()
 	if err != nil {
 		resultFromHost = failure([]byte(err.Error()))
